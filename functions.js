@@ -1,8 +1,4 @@
-//initiate currentvalue variable
-
-
 const displayCalculated = document.querySelector("#calculated");
-
 let display = document.querySelector("#display");
 const clearButton = document.querySelector("#clear");
 const buttons = document.querySelectorAll(".button");
@@ -15,6 +11,8 @@ const substract = (a,b) => {return a-b};
 const multiply = (a,b) => {return a*b};
 const divide = (a,b) => {return a/b};
 
+//a variable for storing last entered character (validation process)
+let lastCharacter="";
 
 
 //calculating function
@@ -68,13 +66,10 @@ equalButton.addEventListener("click", function(e){
 const reduceArray = function(numArray, signArray) {
     signArray.unshift("+");
     let accumulator = 0;
-    console.log(numArray);
-    console.log(signArray);
+  
     for(i=0; i < numArray.length; i++) {
         for(j=0; j < signArray.length; j++) {
-            console.log("Accumulator: " + accumulator);
-            console.log("Sign: " + signArray[j]);
-            console.log("Current num: " + numArray[i]);
+         
             accumulator = operate(accumulator, signArray[j], numArray[i]);
             i++;
             
@@ -107,16 +102,19 @@ const splitString = function () {
 
 }
 
-//a function that styles the textcontent
-const styleContent = function (textContainer) {
-        const text = textContainer.textContent;
-        for(i=0; i < text.length; i++) {
-            if (text[i] === "+" || text[i] === "-" ||text[i] === "x" ||text[i] === "/" ) {
-                text[i].style.color = "green";
-        }
-        }
+/*safety check of last character  
+1. no double sign
+2. no zero divison
+*/
 
-}
+const isSign = function (value) {
+   if (value === "+" || value === "-" ||value === "x" ||value === "/" || value === " ") {
+    return true;
+   } else {
+    return false;
+   }
+}    
+    
 
 
 
@@ -125,11 +123,31 @@ const styleContent = function (textContainer) {
 for(i=0; i < buttons.length; i++) {
     buttons[i].addEventListener("click", function(e) {
     let value = e.target.textContent;
-    if (value === "+" || value === "-" ||value === "x" ||value === "/" ) {
-        value = ` ${value} `;
-        
+    const last = display.textContent[display.textContent.length-1];
+    
+    let a = isSign(value);
+    let b = isSign(last);
+    console.log("Value is sign: " + a);
+    console.log("Last was sign: " + b);
+
+    let controlSign = (a&&b);
+    console.log("Double sign: " + controlSign);
+    
+    switch(controlSign){
+        case true:
+            value= "";
+            break;
+        case false:
+            if (value === "+" || value === "-" ||value === "x" ||value === "/" ) {
+            value = ` ${value} `;
     }
-    display.textContent += value;
+    
+        
+            
+        }
+        display.textContent += value;
+        
+      
     
     
     })
