@@ -2,7 +2,7 @@ const displayCalculated = document.querySelector("#calculated");
 let display = document.querySelector("#display");
 const clearButton = document.querySelector("#clear");
 const buttons = document.querySelectorAll(".button");
-const backspace = document.querySelector("img");
+const backspace = document.querySelector("#back");
 let equalButton = document.querySelector("#equals");
 
 //basic math functions
@@ -70,7 +70,7 @@ const reduceArray = function(numArray, signArray) {
     for(i=0; i < numArray.length; i++) {
         for(j=0; j < signArray.length; j++) {
          
-            accumulator = operate(accumulator, signArray[j], numArray[i]).toFixed(2);
+            accumulator = operate(accumulator, signArray[j], numArray[i]);
             i++;
             
         }
