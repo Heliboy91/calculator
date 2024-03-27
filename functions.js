@@ -70,7 +70,7 @@ const reduceArray = function(numArray, signArray) {
     for(i=0; i < numArray.length; i++) {
         for(j=0; j < signArray.length; j++) {
          
-            accumulator = operate(accumulator, signArray[j], numArray[i]);
+            accumulator = operate(accumulator, signArray[j], numArray[i]).toFixed(2);
             i++;
             
         }
