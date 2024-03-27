@@ -81,7 +81,7 @@
     border-radius: 5px;
     font-size: 4rem;
     font-family: 'Courier New', Courier, monospace;
-    overflow: hidden;
+    transition: transform 0.2s ease; /* Smooth transition for scaling */
 }
 
 .operation {
@@ -111,7 +111,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    
+    transition: transform 0.2s ease; /* Smooth transition for scaling */
     color: red;
     height: 100%;
     
@@ -130,6 +130,7 @@
     font-size: 4rem;
     font-family: 'Courier New', Courier, monospace;
     overflow: hidden;
+    transition: transform 0.2s ease; /* Smooth transition for scaling */
 }
 
 #back {
@@ -140,5 +141,10 @@
     height: 100%;
     border-left: 1px solid white;
     color: red;
+    transition: transform 0.2s ease; /* Smooth transition for scaling */
 }
 
+.shrink {
+    transform: scale(0.8); /* Shrink the button */
+    background-color: rgb(50, 50, 50);
+  }

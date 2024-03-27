@@ -37,7 +37,11 @@ const operate = (num1, operation, num2) => {
 }
 
 //Erase last
-backspace.addEventListener("click", function(){
+backspace.addEventListener("click", function(e){
+    e.target.classList.add('shrink');
+    setTimeout(() => {
+        e.target.classList.remove('shrink');
+      }, 50);
     let content = display.textContent;
     let lastIndex = display.textContent.length-1;
     let withoutLast = content.substring(0, lastIndex);
@@ -50,6 +54,10 @@ backspace.addEventListener("click", function(){
 
 //Total erase
 clearButton.addEventListener("click", function(e){
+    e.target.classList.add('shrink');
+    setTimeout(() => {
+        e.target.classList.remove('shrink');
+      }, 50);
     display.textContent= "";
     lastCharacter = "";
     secondToLastCharacter = "";
@@ -122,6 +130,10 @@ const isSign = function (value) {
 
 for(i=0; i < buttons.length; i++) {
     buttons[i].addEventListener("click", function(e) {
+    e.target.classList.add('shrink');
+    setTimeout(() => {
+        e.target.classList.remove('shrink');
+      }, 50);
     let value = e.target.textContent;
     const last = display.textContent[display.textContent.length-1];
     
