@@ -5,48 +5,131 @@ const buttons = document.querySelectorAll(".button");
 const backspace = document.querySelector("#back");
 let equalButton = document.querySelector("#equals");
 
+//add keyboard support
+document.addEventListener("keydown", function(e){
+    const key = e.key;
+    console.log(key);
+    const content = display.textContent; 
+    let parsed = parseInt(key);
+    const isNumber= !isNaN(parsed);
+    signChar = isSign(key);
+    let input;
+    if(isNumber || signChar) {
+        input = key;
+    } else {
+        input = "";
+    }
+    if(key == "Enter") {
+        splitString();
+    }
+    if(key == "Backspace") {
+        
+        const lastIndex = display.textContent.length-1;
+        const lastChar = content[lastIndex];
+        let isLastsign = isSign(lastChar);
+        let withoutLastChar; 
+        isLastsign? withoutLastChar= content.substring(0, lastIndex-2):withoutLastChar=content.substring(0, lastIndex);
+        
+        display.textContent = withoutLastChar;
+    } 
+
+    if(key == "c") {
+        display.textContent= "";
+        lastCharacter = "";
+        secondToLastCharacter = "";
+        currentValue = 0;
+        displayCalculated.textContent = "";
+    }
+
+    validateCharacter(content, input);
+    
+    
+   
+})
 //basic math functions
 const add = (a,b) => {return a+b};
 const substract = (a,b) => {return a-b};
 const multiply = (a,b) => {return a*b};
 const divide = (a,b) => {return a/b};
 
-//a variable for storing last entered character (validation process)
-let lastCharacter="";
+//a function to validate the input
+function validateCharacter(textcontent, input) {
+    //Find extra points and contols 0 division input
+    let checkPoint = foundPoint(textcontent);
+    let checkDivision = isDivision(textcontent);
+    if(checkPoint === true && input == ".") {
+        input = "";
+    } else if (checkDivision == true && input == "0"){
+        input = "";
+        alert("Sorry, not allowed to divide by 0");
+    } else if (textcontent == "" && (input == "/" || input == "x")){
+        input = "";
+    } 
+    //control double sign input
+    const last = textcontent[textcontent.length-1];
+    let a = isSign(input);
+    let b = isSign(last);
+    let controlSign = (a&&b);
+    switch(controlSign){
+        case true:
+            input= "";
+            break;
+        case false:
+            if (input === "+" || input === "-" ||input === "x" ||input === "*" ||input === "/" || input === " " ) {
+                input = ` ${input} `;
+            }
+    
+        
+            
+        }
+        display.textContent += input;
+
+}
 
 
 //calculating function
 const operate = (num1, operation, num2) => {
-    let result;
+    
+    let preConverted;
     switch (operation) {
         case "+":
-            result = add(num1, num2);
+            preConverted = add(num1, num2);
             break;
             
         case "-":
-            result = substract(num1, num2);
+            preConverted = substract(num1, num2);
             break;
         case "x":
-            result = multiply(num1, num2);
+            preConverted = multiply(num1, num2);
+            break;
+        case "*":
+            preConverted = multiply(num1, num2);
             break;
         case "/":
-            result = divide(num1, num2);
+            preConverted = divide(num1, num2); 
+            break;
+            
     }
+    let isInteger = Number.isInteger(preConverted);
+    isInteger ? result = preConverted : result = Number.parseFloat(preConverted.toFixed(2));
 
     return result;
 }
 
-//Erase last
+//Erase last with button
 backspace.addEventListener("click", function(e){
     e.target.classList.add('shrink');
     setTimeout(() => {
         e.target.classList.remove('shrink');
       }, 50);
-    let content = display.textContent;
-    let lastIndex = display.textContent.length-1;
-    let withoutLast = content.substring(0, lastIndex);
+    const content = display.textContent;
+    const lastIndex = display.textContent.length-1;
+    const lastChar = content[lastIndex];
+    let isLastsign = isSign(lastChar);
+    let withoutLastChar; 
+    isLastsign? withoutLastChar= content.substring(0, lastIndex-2):withoutLastChar=content.substring(0, lastIndex);
     
-    display.textContent = withoutLast;
+    display.textContent = withoutLastChar;
 })
 
 
@@ -62,10 +145,15 @@ clearButton.addEventListener("click", function(e){
     lastCharacter = "";
     secondToLastCharacter = "";
     currentValue = 0;
+    displayCalculated.textContent = "";
 })
 
 //triggering the equal button
 equalButton.addEventListener("click", function(e){
+    e.target.classList.add('shrink');
+    setTimeout(() => {
+        e.target.classList.remove('shrink');
+      }, 50);
     splitString();
     
 })
@@ -93,9 +181,9 @@ const splitString = function () {
     let rawSplit = content.split(" ");
     
 
-    //convert number character to number
+    
      const converted = rawSplit.map((element) => {
-        if (element !== "+" && element !== "-" && element !== "/" && element !== "x" ) {
+        if (element !== "+" && element !== "-" && element !== "/" && element !== "x" && element !== "*") {
             return Number(element);
         } else {
             return String(element);
@@ -110,18 +198,53 @@ const splitString = function () {
 
 }
 
-/*safety check of last character  
-1. no double sign
-2. no zero divison
-*/
 
+//check if a character is sign
 const isSign = function (value) {
-   if (value === "+" || value === "-" ||value === "x" ||value === "/" || value === " ") {
+   if (value === "+" || value === "-" ||value === "x" ||value === "*" ||value === "/" || value === " ") {
     return true;
    } else {
     return false;
    }
-}    
+}
+//check for extra dots
+const foundPoint = function (content) {
+    //check if last character is a dot
+    let lastCharacter = content[content.length-1];
+    let lastSignIndex;
+    //check if there are no other dots after the last sign
+    //1: check the index of last sign chacarcter
+     for(i = content.length; i > 0; i--) {
+        if(isSign(content[i])) {
+            
+            lastSignIndex = i;
+            break;
+        }
+     }
+     let filterThisForDot = content.substring(lastSignIndex);
+     
+     let isDotIncluded = filterThisForDot.includes(".");
+     if(lastCharacter == "." || isDotIncluded === true) {
+        return true;
+     }
+     else {
+        return false;
+     }
+     
+
+}
+
+//check for divison
+const isDivision = function (content) {
+    let last3CharsIndex = content.length-3;
+    last3Chars = content.substring(last3CharsIndex);
+    let includeDivSign = last3Chars.includes("/");
+    if(includeDivSign === true) {
+        return true;
+    } else {
+        return false;
+    }
+}
     
 
 
@@ -130,38 +253,15 @@ const isSign = function (value) {
 
 for(i=0; i < buttons.length; i++) {
     buttons[i].addEventListener("click", function(e) {
+    //animation
     e.target.classList.add('shrink');
     setTimeout(() => {
         e.target.classList.remove('shrink');
       }, 50);
     let value = e.target.textContent;
-    const last = display.textContent[display.textContent.length-1];
-    
-    let a = isSign(value);
-    let b = isSign(last);
-    console.log("Value is sign: " + a);
-    console.log("Last was sign: " + b);
-
-    let controlSign = (a&&b);
-    console.log("Double sign: " + controlSign);
-    
-    switch(controlSign){
-        case true:
-            value= "";
-            break;
-        case false:
-            if (value === "+" || value === "-" ||value === "x" ||value === "/" ) {
-            value = ` ${value} `;
-    }
-    
-        
-            
-        }
-        display.textContent += value;
-        
-      
-    
-    
+    let content = display.textContent;
+    //character validation
+    validateCharacter(content, value);
     })
    
 }

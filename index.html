@@ -7,11 +7,22 @@
     <title>Document</title>
 </head>
 <body>
+    <div id="help">
+        <h2>Help</h2>
+        <ol>
+            <li>You can use either the buttons or you can use the keyboard to enter values</li>
+            <li>You can use "Backspace" to delete the last character</li>
+            <li>Use "C" to erase all the characters</li>
+            <li>Use "Enter" to run the calculation</li>
+            <li>If you omit number after an operation sign, like " 3+ ", we assume a 0</li>
+            <li>If you omit a number before a dot, like " .33 ", we assume a 0</li>
+        </ol>
+        
+
+    </div>
     <div id="screen">
         <div id="calculated"></div>
         <div id="display"></div>
-        
-
         </div>
     </div>
     <div id="container">
@@ -35,7 +46,7 @@
             <div class="button number">4</div>
             <div class="button number">5</div>
             <div class="button number">6</div>
-            <div class="button operation">x</div>
+            <div class="button operation">*</div>
         </div>
         <div class="row">
             <div class="button number">7</div>
@@ -45,9 +56,9 @@
         </div>
         <div class="row">
             <div class="button">.</div>
-            <div class="button">%</div>
-            <div class="button">x^</div>
-            <div class="button">√</div>
+            <div class="button empty"></div>
+            <div class="button empty"></div>
+            <div class="button empty"></div>
 
         </div>
     </div>
